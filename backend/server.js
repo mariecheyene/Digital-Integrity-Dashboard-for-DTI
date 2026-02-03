@@ -1,24 +1,35 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+const PORT = 5000;
 
-// Connect to MongoDB Compass
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected via Compass"))
-  .catch(err => console.log(err));
+// Middleware
+app.use(express.json());
+app.use(cors());
+
+// MongoDB Connection
+mongoose.connect('mongodb://127.0.0.1:27017/digital_integrity')
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
+
+// Import Routes
+const userRoutes = require('./routes/userRoutes');
+
+// Routes
+app.use('/api/users', userRoutes);
 
 // Test route
-app.get("/", (req, res) => {
-  res.send("Digital Integrity Dashboard API running");
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Digital Integrity Dashboard API',
+    status: 'running'
+  });
 });
 
-// Use user routes
-app.use("/api/users", require("./routes/userRoutes"));
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start Server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`👤 User API: http://localhost:${PORT}/api/users`);
+});
