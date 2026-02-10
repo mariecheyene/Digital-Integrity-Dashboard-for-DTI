@@ -22,11 +22,33 @@ const userSchema = new mongoose.Schema({
   role: { 
     type: String, 
     required: true, 
-    enum: ['Admin', 'Staff'] // Only 2 roles
+    enum: ['Admin', 'Staff']
   },
   isActive: { 
     type: Boolean, 
     default: true 
+  },
+  // OTP for first-time login
+  otp: {
+    type: String,
+    default: null
+  },
+  otpExpiry: {
+    type: Date,
+    default: null
+  },
+  isFirstLogin: {
+    type: Boolean,
+    default: true
+  },
+  // Forgot password OTP
+  resetOtp: {
+    type: String,
+    default: null
+  },
+  resetOtpExpiry: {
+    type: Date,
+    default: null
   }
 }, { 
   timestamps: true 
